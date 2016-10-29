@@ -1,0 +1,12 @@
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    CODACY_PROJECT_TOKEN: "616c7f78d9224d98bad492cb0a7e728e"
+
+test:
+  override:
+    - sbt clean coverage test
+    - sbt coverageReport
+    - sbt coverageAggregate
+    - sbt codacyCoverage
