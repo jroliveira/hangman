@@ -3,8 +3,6 @@ package com.jroliveira.hangman.domain.components
 import com.jroliveira.hangman.Infra.components.data.MongoDbComponent
 import com.jroliveira.hangman.domain.entities.{Game, Move}
 import com.mongodb.casbah.commons.MongoDBObject
-import salat._
-import salat.global._
 
 import scala.concurrent.Future
 
@@ -22,17 +20,16 @@ trait PerformMoveComponent extends Component {
 
           case _ =>
             val move = Move(letter, game.id)
-            mongoDb.collection("moves") += grater[Move].asDBObject(move)
+            mongoDb
+              .in("moves")
+              .save(move)
 
             if (wrongAnswer(letter, game)) {
               val newGame = game.copy(attempts = game.attempts + 1)
               val condition = MongoDBObject("id" -> game.id)
               mongoDb
-                .collection("games")
-                .update(
-                  condition,
-                  grater[Game].asDBObject(newGame)
-                )
+                .in("games")
+                .update(condition, newGame)
             }
 
             Right(())

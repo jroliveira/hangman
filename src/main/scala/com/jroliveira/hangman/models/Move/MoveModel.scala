@@ -5,10 +5,7 @@ import com.jroliveira.hangman.models.Model
 
 import scala.concurrent.Future
 
-final case class MoveRequest(letter: Char,
-                             game: GameRequest)
-
-final case class GameRequest(id: String)
+final case class MoveRequest(letter: Char)
 
 final case class MoveResponse(attempts: Int,
                               wrong: String,

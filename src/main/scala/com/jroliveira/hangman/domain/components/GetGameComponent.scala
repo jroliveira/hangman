@@ -1,7 +1,7 @@
 package com.jroliveira.hangman.domain.components
 
 import com.jroliveira.hangman.Infra.components.data.MongoDbComponent
-import com.jroliveira.hangman.domain.entities.{Challenge, Game}
+import com.jroliveira.hangman.domain.entities.Game
 import com.mongodb.casbah.Imports._
 import com.mongodb.casbah.commons.MongoDBObject
 import salat._
