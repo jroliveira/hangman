@@ -3,8 +3,6 @@ package com.jroliveira.hangman.domain.components
 import com.jroliveira.hangman.Infra.components.IdentityGeneratorComponent
 import com.jroliveira.hangman.Infra.components.data.MongoDbComponent
 import com.jroliveira.hangman.domain.entities.{Challenge, Game}
-import salat._
-import salat.global._
 
 import scala.concurrent.Future
 
@@ -20,7 +18,10 @@ trait CreateGameComponent extends Component {
         val id = identityGenerator.generate()
         val game = Game(id, player, challenge)
 
-        mongoDb.collection("games") += grater[Game].asDBObject(game)
+        mongoDb
+          .in("games")
+          .save(game)
+
         game
       }
     }

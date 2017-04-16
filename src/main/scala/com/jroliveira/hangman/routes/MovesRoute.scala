@@ -1,15 +1,14 @@
 package com.jroliveira.hangman.routes
 
 import com.jroliveira.hangman.Infra.ComponentRegistry
-import com.jroliveira.hangman.models.Move.{GameRequest, MoveRequest, MoveResponse, MoveResponseMapper}
+import com.jroliveira.hangman.models.Move.{MoveRequest, MoveResponse, MoveResponseMapper}
 
 object MovesRoute extends Route {
-  implicit val gameRequestFormat = jsonFormat1(GameRequest)
-  implicit val moveRequestFormat = jsonFormat2(MoveRequest)
+  implicit val moveRequestFormat = jsonFormat1(MoveRequest)
   implicit val moveResponseFormat = jsonFormat3(MoveResponse)
 
   val routes =
-    path("moves") {
+    path("games" / Segment / "moves") { gameId =>
       post {
         entity(as[MoveRequest]) { request =>
           val getGame = ComponentRegistry.getGame
@@ -18,10 +17,10 @@ object MovesRoute extends Route {
 
           val done =
             for {
-              game <- getGame(request.game.id)
+              game <- getGame(gameId)
               _ <- performMove(request.letter, game.get)
               moves <- getMoves(game.get)
-              gameUpdated <- getGame(request.game.id)
+              gameUpdated <- getGame(gameId)
               response <- MoveResponseMapper(gameUpdated.get, moves.get)
             } yield response
 
